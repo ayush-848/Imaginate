@@ -25,14 +25,14 @@ const Hero = () => {
 </h2>
 
             {/* Subtitle */}
-            <h2 className="mb-6 max-w-xl text-3xl sm:text-3xl md:text-3xl font-semibold text-blue-400 italic font-montserrat">
+            <h2 className="mb-6 max-w-xl text-2xl sm:text-2xl md:text-3xl font-semibold text-blue-400 italic font-montserrat">
               Turn Your Words into Stunning{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-teal-300 text-transparent bg-clip-text text-4xl font-extrabold animate-text-shadow hover:scale-105 transition-all">
+              <span className="bg-gradient-to-r from-blue-600 to-teal-300 text-transparent bg-clip-text text-3xl font-extrabold animate-text-shadow hover:scale-105 transition-all md:text-4xl">
                 Visuals
               </span>
             </h2>
             {/* Description */}
-            <p className="text-lg text-gray-300 md:text-xl max-w-xl mx-auto my-8 font-montserrat">
+            <p className="text-base text-gray-300 md:text-xl max-w-xl mx-auto my-8 font-montserrat">
               Imaginate lets you transform text prompts into stunning AI-generated artwork. Whether you're an artist, designer, or dreamer, bring your ideas to life in seconds.
             </p>
           </div>
