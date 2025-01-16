@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const FormData = require('form-data');  // You need to install this package
 const app = express();
 const port = 5000;
-
+require('dotenv').config();
 // Middleware to parse JSON body requests
 app.use(express.json());
 
@@ -19,29 +20,31 @@ app.post('/generate', async (req, res) => {
     return res.status(400).json({ message: 'Prompt is required' });
   }
 
-  // RapidAPI request configuration
-  const options = {
-    method: 'POST',
-    url: 'https://ai-text-to-image-generator-api.p.rapidapi.com/realistic',
-    headers: {
-      'x-rapidapi-key': `${process.env.RAPID_API_KEY}`,
-      'x-rapidapi-host': 'ai-text-to-image-generator-api.p.rapidapi.com',
-      'Content-Type': 'application/json',
-    },
-    data: {
-      inputs: prompt,
-    },
-  };
+  // Prepare FormData with the prompt
+  const form = new FormData();
+  form.append('prompt', prompt);
 
   try {
-    const response = await axios.request(options);
-    if (response.data) {
-      return res.json({ data: response.data });
-    } else {
-      return res.status(500).json({ message: 'No data returned from RapidAPI' });
-    }
+    // Make the request to the ClipDrop API
+    const response = await axios.post('https://clipdrop-api.co/text-to-image/v1', form, {
+      headers: {
+        ...form.getHeaders(), // This ensures the correct Content-Type is set
+        'x-api-key': process.env.CLICKDROP_API_KEY, // Replace with your actual API key
+      },
+      responseType: 'arraybuffer', // Ensure the response is in binary form
+    });
+
+    // Convert the array buffer response to a base64 string
+    const imageBuffer = Buffer.from(response.data);
+    const base64Image = imageBuffer.toString('base64');
+    const imageSrc = `data:image/png;base64,${base64Image}`;
+
+    // Return the base64-encoded image in the response
+    res.json({ imageUrl: imageSrc });
+
   } catch (error) {
-    return res.status(500).json({ message: 'Error fetching image from RapidAPI', error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: 'Error fetching image from ClipDrop API', error: error.message });
   }
 });
 

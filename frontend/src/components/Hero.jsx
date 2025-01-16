@@ -1,4 +1,6 @@
+import { Sparkles } from 'lucide-react';
 import React from 'react';
+
 
 const Hero = () => {
   return (
@@ -6,11 +8,11 @@ const Hero = () => {
       <div className="mx-auto max-w-xl lg:max-w-screen-xl">
         <div className="mx-auto mb-16 flex flex-col items-center text-center lg:mb-0 lg:max-w-2xl">
           <div className="mb-6 max-w-xl">
-            <div className='mb-4'>
-              <p className="bg-teal-400 mb-4 inline-block rounded-full px-3 py-px text-xs font-bold uppercase tracking-wider text-blue-900 border border-slate-100">
-                INTRODUCING
-              </p>
-            </div>
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 px-4 py-2 rounded-full text-blue-400 text-sm mb-4 font-raleway font-semibold">
+            <Sparkles className="w-4 h-4" />
+            
+            <span>AI-Powered Image Generation</span>
+          </div>
             <h2 className='font-bold md:text-5xl lg:text-5xl mb-10 font-montserrat'>&nbsp;&nbsp;&nbsp;&nbsp;IMAGINATE ✨</h2>
             <h2 className="mb-6 max-w-xl text-3xl sm:text-3xl md:text-3xl font-semibold text-blue-400 italic font-montserrat">
               Turn Your Words into Stunning{' '}

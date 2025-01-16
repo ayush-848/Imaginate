@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 const Home = () => {
   return (
     <div>
-      <div className="relative min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
+      <div className="relative min-h-screen bg-gradient-to-b from-black via-gray-900 to-slate-950 overflow-hidden">
         {/* Gradient Mesh Background */}
         <div className="absolute inset-0">
           {/* Reduced radius for glowing effects */}
