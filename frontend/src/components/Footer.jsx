@@ -101,9 +101,14 @@ const Footer = () => {
           </div>
 
           {/* Copyright */}
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            © 2023 IMAGINATE ✨. All Rights Reserved.
-          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+  © 2023 
+  <span className="flex items-center gap-1">
+    IMAGINATE 
+    <img src={logo} alt="Logo" className="w-4 h-4" />.
+  </span>&nbsp; All Rights Reserved.
+</span>
+
         </div>
       </div>
     </footer>
