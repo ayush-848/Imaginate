@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const FormData = require('form-data');  // You need to install this package
+const FormData = require('form-data');
+const connectDB=require('./config/connectDB')
+const authRouter=require('./routes/authRouter')
+
 const app = express();
 const port = 5000;
 require('dotenv').config();
@@ -10,6 +13,7 @@ app.use(express.json());
 
 // Enable CORS for all origins (for development)
 app.use(cors());
+connectDB();
 
 // /generate route handler
 app.post('/generate', async (req, res) => {
@@ -47,6 +51,8 @@ app.post('/generate', async (req, res) => {
     return res.status(500).json({ message: 'Error fetching image from ClipDrop API', error: error.message });
   }
 });
+
+app.use('/auth',authRouter);
 
 // Start the server
 app.listen(port, () => {

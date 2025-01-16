@@ -13,10 +13,17 @@ const Hero = () => {
               <span>AI-Powered Image Generation</span>
             </div>
             {/* Logo and Title */}
-            <h2 className="flex items-center justify-center font-bold md:text-5xl lg:text-5xl mb-10 font-montserrat ">
-              IMAGINATE <img src={logo} alt="Logo" className="w-14 h-14" />
-              
-            </h2>
+            <h2
+  className="flex items-center justify-center font-bold text-4xl sm:text-4xl md:text-5xl lg:text-5xl mb-10 font-montserrat"
+>
+  IMAGINATE
+  <img
+    src={logo}
+    alt="Logo"
+    className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 ml-2"
+  />
+</h2>
+
             {/* Subtitle */}
             <h2 className="mb-6 max-w-xl text-3xl sm:text-3xl md:text-3xl font-semibold text-blue-400 italic font-montserrat">
               Turn Your Words into Stunning{' '}

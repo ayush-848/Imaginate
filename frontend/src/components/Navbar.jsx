@@ -29,11 +29,21 @@ const Navbar = () => {
             <li className="text-gray-200 md:mr-8 hover:text-white">
               <a href="#">Support</a>
             </li>
-            <li className="md:mr-8">
-              <button className="rounded-full border-2 border-blue-400 px-6 py-1 text-blue-400 transition-colors hover:bg-blue-400 hover:text-white">
-                Login
-              </button>
+            <li className="md:mr-4">
+              <a href="/login">
+                <button className="rounded-full border-2 border-blue-400 px-6 py-1 text-blue-400 transition-colors hover:bg-blue-400 hover:text-white">
+                  Login
+                </button>
+              </a>
             </li>
+            <li className='md:mr-4'>
+            <a href="/signup">
+                <button className="rounded-full border-2 border-blue-400 px-6 py-1 text-blue-400 transition-colors hover:bg-blue-400 hover:text-white">
+                  Signup
+                </button>
+              </a>
+            </li>
+
           </ul>
         </nav>
       </header>
