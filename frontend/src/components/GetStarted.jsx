@@ -72,7 +72,7 @@ const GetStarted = () => {
         </p>
 
         {/* Input & Submit Button */}
-        <div className="flex gap-4 mb-6 mt-40">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 mt-40">
           <input
             type="text"
             placeholder="Enter your prompt..."
@@ -145,9 +145,7 @@ const GetStarted = () => {
 
         {/* Instructions Section */}
         <div className="text-center text-gray-300 mt-24">
-          <h3 className="text-2xl font-bold text-blue-400 mb-4">
-            How to Use
-          </h3>
+          <h3 className="text-2xl font-bold text-blue-400 mb-4">How to Use</h3>
           <p className="text-lg">
             1. Enter a creative prompt.<br />
             2. Click "Send" to generate visuals.<br />
