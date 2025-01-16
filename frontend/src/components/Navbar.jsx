@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../assets/logo bg.svg'
 
 const Navbar = () => {
   return (
@@ -7,7 +8,8 @@ const Navbar = () => {
         <a href="#" className="flex cursor-pointer items-center whitespace-nowrap font-montserrat text-3xl font-semibold text-white">
           <span className="mr-12 text-6xl text-blue-400">
           </span>
-          IMAGINATE ✨
+          <span>IMAGINATE</span><img src={logo} alt="Logo" className="w-8 h-8" />
+
         </a>
         <input type="checkbox" className="peer hidden" id="navbar-open" />
         <label className="absolute top-5 right-7 cursor-pointer text-white md:hidden" htmlFor="navbar-open">
