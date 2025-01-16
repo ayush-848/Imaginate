@@ -1,4 +1,5 @@
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+import logo from '../assets/logo bg.svg'
 
 const Footer = () => {
   return (
@@ -8,10 +9,10 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row md:justify-between md:items-start space-y-12 md:space-y-0 md:space-x-12">
           {/* Logo & About */}
           <div className="flex-1">
-            <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+            <a href="/" className="flex items-center space-x-1 rtl:space-x-reverse mb-4">
               <span className="text-2xl font-semibold whitespace-nowrap">
-                IMAGINATE ✨
-              </span>
+                IMAGINATE 
+              </span><img src={logo} alt="Logo" className="w-8 h-8" />
             </a>
             <p className="text-gray-400 text-sm">
               IMAGINATE is your go-to platform for turning ideas into stunning visuals. Explore endless creative possibilities and unleash your imagination.
