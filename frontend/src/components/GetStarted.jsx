@@ -86,7 +86,7 @@ const GetStarted = () => {
           {!showActions && (
             <button
               onClick={handleSubmit}
-              className={`px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition disabled:opacity-50 ${
+              className={`px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition disabled:opacity-50 ${
                 loading ? "cursor-not-allowed" : ""
               }`}
               disabled={loading}
