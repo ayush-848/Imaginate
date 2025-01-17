@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import logo from '../assets/logo bg.svg';
 import Footer from '../components/Footer';
 import { handleError, handleSuccess } from '../utils/errorHandler';
+import Navbar from '../components/Navbar';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -28,7 +29,6 @@ const SignUp = () => {
 
     const { name, email, password, confirmPassword } = formField;
 
-    // Validate password and confirm password match
     if (password !== confirmPassword) {
       handleError('Passwords do not match.');
       return;
@@ -62,7 +62,6 @@ const SignUp = () => {
         handleError(result.message || 'An error occurred.');
       }
 
-      // Reset form fields
       setFormField({
         name: '',
         email: '',
@@ -78,22 +77,22 @@ const SignUp = () => {
     <div>
       <ToastContainer />
       <section className="bg-gradient-to-b from-black via-slate-900 to-black text-white">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 font-montserrat">
-          <a href="#" className="flex items-center mb-6 text-3xl font-bold">
+        <Navbar />
+        <div className="flex flex-col items-center justify-center px-4 py-8 mx-auto md:h-screen lg:py-0 font-montserrat">
+          <a href="#" className="flex items-center -mt-16 mb-4 text-3xl font-bold">
             <span>IMAGINATE</span>
             <img src={logo} alt="Logo" className="w-8 h-8" />
           </a>
-          <div className="w-full bg-slate-800 rounded-lg shadow-lg border border-slate-700 md:mt-0 sm:max-w-md xl:p-0">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
+          <div className="w-full bg-slate-800 rounded-lg shadow-lg border border-slate-700 sm:max-w-sm">
+            <div className="p-4 space-y-3 sm:p-6">
+              <h1 className="text-lg font-bold tracking-tight text-white md:text-xl">
                 Create an account
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-                {/* Full Name Field */}
+              <form className="space-y-3" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-300"
+                    className="block mb-1 text-sm font-medium text-gray-300"
                   >
                     Full Name
                   </label>
@@ -104,15 +103,14 @@ const SignUp = () => {
                     onChange={handleChange}
                     value={formField.name}
                     placeholder="John Doe"
-                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
                     required
                   />
                 </div>
-                {/* Email Field */}
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-300"
+                    className="block mb-1 text-sm font-medium text-gray-300"
                   >
                     Your email
                   </label>
@@ -123,15 +121,14 @@ const SignUp = () => {
                     onChange={handleChange}
                     value={formField.email}
                     placeholder="name@company.com"
-                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
                     required
                   />
                 </div>
-                {/* Password Field */}
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-300"
+                    className="block mb-1 text-sm font-medium text-gray-300"
                   >
                     Password
                   </label>
@@ -142,17 +139,16 @@ const SignUp = () => {
                     onChange={handleChange}
                     value={formField.password}
                     placeholder="••••••••"
-                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
                     required
                   />
                 </div>
-                {/* Confirm Password Field */}
                 <div>
                   <label
                     htmlFor="confirmPassword"
-                    className="block mb-2 text-sm font-medium text-gray-300"
+                    className="block mb-1 text-sm font-medium text-gray-300"
                   >
-                    Confirm password
+                    Confirm Password
                   </label>
                   <input
                     type="password"
@@ -161,41 +157,38 @@ const SignUp = () => {
                     onChange={handleChange}
                     value={formField.confirmPassword}
                     placeholder="••••••••"
-                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                    className="bg-slate-700 border border-slate-600 text-white text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
                     required
                   />
                 </div>
-                {/* Terms and Conditions */}
                 <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="terms"
-                      aria-describedby="terms"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-slate-700 focus:ring-3 focus:ring-blue-600 dark:focus:ring-blue-500 dark:ring-offset-gray-800"
-                      required
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="terms" className="font-light text-gray-300">
-                      I accept the{' '}
-                      <a
-                        className="font-medium text-blue-500 hover:underline"
-                        href="#"
-                      >
-                        Terms and Conditions
-                      </a>
-                    </label>
-                  </div>
+                  <input
+                    id="terms"
+                    aria-describedby="terms"
+                    type="checkbox"
+                    className="w-4 h-4 border border-gray-300 rounded bg-slate-700 focus:ring-2 focus:ring-blue-600"
+                    required
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="ml-2 text-sm font-light text-gray-300"
+                  >
+                    I accept the{' '}
+                    <a
+                      className="font-medium text-blue-500 hover:underline"
+                      href="#"
+                    >
+                      Terms and Conditions
+                    </a>
+                  </label>
                 </div>
-                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-md text-sm px-4 py-2"
                 >
                   Create an account
                 </button>
-                <p className="text-sm font-light text-gray-400">
+                <p className="text-xs font-light text-gray-400">
                   Already have an account?{' '}
                   <a
                     href="/login"
@@ -212,6 +205,7 @@ const SignUp = () => {
       <Footer />
     </div>
   );
+  
 };
 
 export default SignUp;
