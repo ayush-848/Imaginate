@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import logo from '../assets/logo bg.svg';
 import Footer from '../components/Footer';
+import { handleError, handleSuccess } from '../utils/errorHandler';
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formField, setFormField] = useState({
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
 
   const handleChange = (e) => {
@@ -17,52 +22,61 @@ const SignUp = () => {
     }));
   };
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Log form data for debugging
-    console.log('Form Data:', formField);
-  
-    // Define the API endpoint
     const url = 'http://localhost:5000/auth/create-account';
-  
+
+    const { name, email, password, confirmPassword } = formField;
+
+    // Validate password and confirm password match
+    if (password !== confirmPassword) {
+      handleError('Passwords do not match.');
+      return;
+    }
+
     try {
-      // Make the POST request to the server
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formField), // Send the form data as JSON
+        body: JSON.stringify({ name, email, password }),
       });
-  
-      // Check if the response is successful
+
+      const result = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error Response:', errorData);
-        alert(`Error: ${errorData.message || 'Failed to create account.'}`);
+        handleError(result.message || 'Failed to create account.');
         return;
       }
-  
-      // Parse the response body
-      const result = await response.json();
-      
-      // Optionally reset the form fields
+
+      if (result.success) {
+        handleSuccess(result.message);
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
+      } else if (result.error) {
+        const details = result.error?.details[0]?.message || 'An error occurred.';
+        handleError(details);
+      } else {
+        handleError(result.message || 'An error occurred.');
+      }
+
+      // Reset form fields
       setFormField({
         name: '',
         email: '',
         password: '',
+        confirmPassword: '',
       });
     } catch (error) {
-      // Handle network or other unexpected errors
-      console.error('Network Error:', error);
-      alert('Network error. Please try again later.');
+      handleError(error.message || 'An unexpected error occurred.');
     }
   };
-  
 
   return (
     <div>
+      <ToastContainer />
       <section className="bg-gradient-to-b from-black via-slate-900 to-black text-white">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 font-montserrat">
           <a href="#" className="flex items-center mb-6 text-3xl font-bold">
@@ -74,7 +88,7 @@ const SignUp = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
                 Create an account
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handlesubmit}>
+              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 {/* Full Name Field */}
                 <div>
                   <label
@@ -145,6 +159,7 @@ const SignUp = () => {
                     name="confirmPassword"
                     id="confirmPassword"
                     onChange={handleChange}
+                    value={formField.confirmPassword}
                     placeholder="••••••••"
                     className="bg-slate-700 border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
                     required
@@ -162,10 +177,7 @@ const SignUp = () => {
                     />
                   </div>
                   <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="terms"
-                      className="font-light text-gray-300"
-                    >
+                    <label htmlFor="terms" className="font-light text-gray-300">
                       I accept the{' '}
                       <a
                         className="font-medium text-blue-500 hover:underline"
@@ -186,7 +198,7 @@ const SignUp = () => {
                 <p className="text-sm font-light text-gray-400">
                   Already have an account?{' '}
                   <a
-                    href="#"
+                    href="/login"
                     className="font-medium text-blue-500 hover:underline"
                   >
                     Login here

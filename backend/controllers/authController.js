@@ -27,7 +27,7 @@ const signup=async(req,res)=>{
         checkFormat(name,email,password)
         const isUser=await User.findOne({email});
         if (isUser) {
-            return res.status(400).json({ error: true, message: "User already exists" });
+            return res.status(400).json({ success:false,error: true, message: "User already exists" });
         }
 
         const hashedPassword=await bcrypt.hash(password,10);
@@ -45,22 +45,18 @@ const signup=async(req,res)=>{
             email
         })
         return res.status(201).json({
+            success:true,
             error: false,
             message: "Account created successfully",
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-            }
         })
 
 
     }catch (error) {
         if (error.message.includes("All fields are required") || error.message.includes("Invalid email format") || error.message.includes("Password must be at least")) {
-            return res.status(400).json({ error: true, message: error.message });
+            return res.status(400).json({ success:false,error: true, message: error.message });
         }
         console.error("Error creating account:", error);
-        return res.status(500).json({ error: true, message: "Server error, please try again later" });
+        return res.status(500).json({ success:false,error: true, message: "Server error, please try again later" });
     }
 }
 

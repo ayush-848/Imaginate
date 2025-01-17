@@ -94,7 +94,7 @@ const GetStarted = () => {
         </div>
 
         {/* Main Generation Section */}
-        <div className="max-w-3xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm mb-28">
+        <div className="max-w-2xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm mb-28">
           <div className="flex flex-col gap-4">
             <input
               type="text"
