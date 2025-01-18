@@ -128,9 +128,6 @@ const AuthProvider = ({ children }) => {
   
       // Optional delay for smooth transition
       await new Promise((resolve) => setTimeout(resolve, 2000));
-  
-      // Redirect to the home page
-      window.location.href = '/';
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || error.message || 'Error during logout.';
