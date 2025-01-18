@@ -114,7 +114,7 @@ const login = async (req, res) => {
             message: "Login Successful",
             jwtToken,
             user
-        });
+        })
     } catch (error) {
         console.error("Login error:", error);
         return res.status(500).json({
