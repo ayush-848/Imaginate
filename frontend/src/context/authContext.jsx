@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { handleError, handleSuccess } from '../utils/errorHandler';
 import LogoutAnimation from '../assets/logoutAnimation';
 
@@ -62,8 +63,18 @@ const AuthProvider = ({ children }) => {
       const result = response.data;
 
       if (result.success) {
-        handleSuccess(result.message);
-        window.location.href = '/login';
+        toast.promise(
+          new Promise((resolve) => {
+            handleSuccess(result.message);
+            setTimeout(resolve, 2000); // Delay to allow toast to show
+          }),
+          {
+            pending: 'Creating your account...',
+            success: 'Account created successfully!',
+            error: 'Failed to create account.',
+          }
+        );
+        window.location.href = '/login'; // Redirect after the message
         return true;
       } else {
         handleError(result.message || 'Failed to create account.');
@@ -93,9 +104,19 @@ const AuthProvider = ({ children }) => {
       const { success, message, user } = response.data;
   
       if (success) {
-        setUser(user);
-        handleSuccess(message || `Welcome back, ${user.name}!`); // Ensuring a proper message is passed here
-        window.location.href = '/'; // Redirect after successful login
+        toast.promise(
+          new Promise((resolve) => {
+            setUser(user);
+            handleSuccess(message || `Welcome back, ${user.name}!`);
+            setTimeout(resolve, 2000); // Delay to allow toast to show
+          }),
+          {
+            pending: 'Logging in...',
+            success: 'Logged in successfully!',
+            error: 'Login failed.',
+          }
+        );
+        window.location.href = '/'; // Redirect after the message
         return true;
       } else {
         handleError(message || 'Login failed.');
@@ -115,7 +136,6 @@ const AuthProvider = ({ children }) => {
   
     setLogoutLoading(true);
     try {
-  
       // Make the logout API call
       await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/logout`,
@@ -128,6 +148,7 @@ const AuthProvider = ({ children }) => {
   
       // Optional delay for smooth transition
       await new Promise((resolve) => setTimeout(resolve, 2000));
+      toast.success('You have been logged out successfully!');
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || error.message || 'Error during logout.';
