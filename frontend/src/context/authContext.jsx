@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/protected`, // Using process.env for environment variable
+          `${import.meta.env.VITE_API_URL}/protected`,
           {
             withCredentials: true,
             headers: {
@@ -36,7 +36,6 @@ const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error('Error loading user:', error.response?.data?.message || error.message);
         setUser(null);
-        handleError(error.response?.data?.message || 'Error loading user data.');
       } finally {
         setLoading(false);
       }
@@ -77,30 +76,44 @@ const AuthProvider = ({ children }) => {
   };
 
   // Login function
-  const login = async (credentials) => {
+  const login = async (email, password) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/login`,
-        credentials,
-        { withCredentials: true }
+        { email, password },
+        {
+          withCredentials: true,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }
       );
 
-      const userData = response.data.user;
-      setUser(userData); // Set user data after successful login
-      handleSuccess('Login successful');
+      const { success, message, user } = response.data;
+
+      if (success) {
+        setUser(user);
+        handleSuccess(message);
+        window.location.href = '/';
+        return true;
+      } else {
+        handleError(message || 'Login failed.');
+        return false;
+      }
     } catch (error) {
-      console.error('Error logging in:', error.message);
-      handleError(error.response?.data?.message || 'Error logging in');
+      const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred.';
+      handleError(errorMessage);
+      return false;
     }
   };
 
   // Logout function
   const logout = async () => {
     if (!user) return; // Ensure logout logic runs only if the user is logged in
-    
+  
     setLogoutLoading(true);
     try {
-      // Show logout animation
       handleSuccess('Logging out...', { autoClose: 1000 });
   
       // Make the logout API call
@@ -110,7 +123,7 @@ const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
   
-      // Clear user state after logout
+      // Clear user state
       setUser(null);
   
       // Optional delay for smooth transition
@@ -126,6 +139,7 @@ const AuthProvider = ({ children }) => {
       setLogoutLoading(false);
     }
   };
+  
 
   if (loading) {
     return (
@@ -150,7 +164,6 @@ const AuthProvider = ({ children }) => {
         isAuthenticated: !!user,
       }}
     >
-      {/* Only show the logout animation while logout is in progress */}
       <LogoutAnimation isVisible={logoutLoading} />
       {children}
     </AuthContext.Provider>
