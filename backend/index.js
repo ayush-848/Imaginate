@@ -6,7 +6,7 @@ const connectDB=require('./config/connectDB')
 const cookieParser = require('cookie-parser');
 const authRouter=require('./routes/authRouter');
 const authenticated = require('./middlewares/authenticated');
-
+const User=require('./models/userModel')
 
 const app = express();
 const port = 5000;
@@ -18,11 +18,13 @@ app.use(cookieParser());
 // Enable CORS for all origins (for development)
 app.use(
   cors({
-    origin: ["https://imaginate-beta.vercel.app","http://localhost:5173"],
-    methods: ["GET", "POST", "PUT", "DELETE"], // Add any methods you need
-    allowedHeaders: ["Content-Type", "Authorization"], // Include headers you use
+    origin: ["https://imaginate-beta.vercel.app", "http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Allow credentials to be included in the request
   })
 );
+
 connectDB();
 
 
@@ -30,13 +32,19 @@ app.get('/',(req,res)=>{
   res.send('This is Imaginate API')
 })
 
-app.get('/protected',authenticated,(req,res)=>{
+app.get('/protected', authenticated, async (req, res) => {
+  const user = await User.findById(req.user._id).select('-password'); // Exclude sensitive fields
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+
   res.status(200).json({
     success: true,
-    message: "You have access!",
-    user: req.user,
+    message: 'User authenticated',
+    user,
+  });
 });
-})
+
 // /generate route handler
 app.post('/generate', authenticated, async (req, res) => {
 

@@ -5,9 +5,12 @@ import logo from '../assets/logo bg.svg';
 import Footer from '../components/Footer';
 import { handleError, handleSuccess } from '../utils/errorHandler';
 import Navbar from '../components/Navbar';
+import useAuth from '../hooks/useAuth';
+
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { signup } = useAuth();
   const [formField, setFormField] = useState({
     name: '',
     email: '',
@@ -25,7 +28,6 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = `${import.meta.env.VITE_API_URL}/auth/create-account`;
 
     const { name, email, password, confirmPassword } = formField;
 
@@ -33,44 +35,22 @@ const SignUp = () => {
       handleError('Passwords do not match.');
       return;
     }
+    const success = await signup(name, email, password);
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        handleError(result.message || 'Failed to create account.');
-        return;
-      }
-
-      if (result.success) {
-        handleSuccess(result.message);
-        setTimeout(() => {
-          navigate('/login');
-        }, 1000);
-      } else if (result.error) {
-        const details = result.error?.details[0]?.message || 'An error occurred.';
-        handleError(details);
-      } else {
-        handleError(result.message || 'An error occurred.');
-      }
-
-      setFormField({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
-    } catch (error) {
-      handleError(error.message || 'An unexpected error occurred.');
+    if (success) {
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     }
+
+
+
+    setFormField({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    });
   };
 
   return (
@@ -205,7 +185,7 @@ const SignUp = () => {
       <Footer />
     </div>
   );
-  
+
 };
 
 export default SignUp;

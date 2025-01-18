@@ -5,6 +5,7 @@ import webfont from 'webfontloader';
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 
+
 const App = () => {
   useEffect(() => {
     webfont.load({
@@ -16,13 +17,11 @@ const App = () => {
 
   return (
     <Router>
-      <div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path="/login" element={<Login/>} />
         </Routes>
-      </div>
     </Router>
   );
 };

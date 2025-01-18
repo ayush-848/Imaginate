@@ -21,44 +21,55 @@ const checkFormat = (name, email, password) => {
 };
 
 
-const signup=async(req,res)=>{
+const signup = async (req, res) => {
     try {
-        const {name,email,password}=req.body;
-        checkFormat(name,email,password)
-        const isUser=await User.findOne({email});
-        if (isUser) {
-            return res.status(400).json({ success:false,error: true, message: "User already exists" });
-        }
-
-        const hashedPassword=await bcrypt.hash(password,10);
-         // Create new user
-         const user = new User({
-            name,
-            email,
-            password: hashedPassword,
-        });
-        await user.save();
-
-        // Success response
-        console.log({
-            name,
-            email
-        })
-        return res.status(201).json({
-            success:true,
-            error: false,
-            message: "Account created successfully",
-        })
-
-
-    }catch (error) {
-        if (error.message.includes("All fields are required") || error.message.includes("Invalid email format") || error.message.includes("Password must be at least")) {
-            return res.status(400).json({ success:false,error: true, message: error.message });
-        }
-        console.error("Error creating account:", error);
-        return res.status(500).json({ success:false,error: true, message: "Server error, please try again later" });
+      const { name, email, password } = req.body;
+      checkFormat(name, email, password);
+      
+      const isUser = await User.findOne({ email });
+      if (isUser) {
+        return res.status(400).json({ success: false, error: true, message: "User already exists" });
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create new user
+      const user = new User({
+        name,
+        email,
+        password: hashedPassword,
+      });
+      await user.save();
+  
+      // Success response
+      console.log({ name, email });
+  
+      return res.status(201).json({
+        success: true,
+        error: false,
+        message: "Account created successfully",
+      });
+    } catch (error) {
+      // Improved error handling to send clearer messages
+      console.error("Error creating account:", error);
+  
+      let errorMessage = "Server error, please try again later";
+      if (error.message.includes("All fields are required")) {
+        errorMessage = "All fields are required";
+      } else if (error.message.includes("Invalid email format")) {
+        errorMessage = "Invalid email format";
+      } else if (error.message.includes("Password must be at least")) {
+        errorMessage = "Password must be at least 4 characters";
+      }
+  
+      return res.status(500).json({
+        success: false,
+        error: true,
+        message: errorMessage,
+      });
     }
-}
+  };
+  
 
 
 const login = async (req, res) => {
@@ -101,9 +112,8 @@ const login = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Login Success",
-            jwtToken, // Token to be stored on the client side
-            email,
-            name: user.name,
+            jwtToken,
+            user
         });
     } catch (error) {
         console.error("Login error:", error);
@@ -115,4 +125,27 @@ const login = async (req, res) => {
 };
 
 
-module.exports={signup,login}
+const logout = async (req, res) => {
+  try {
+    // Clear the JWT token cookie
+    res.clearCookie('jwtToken', {
+      httpOnly: true,  // Ensures the cookie can't be accessed by JavaScript
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
+      sameSite: 'Strict',  // Restrict cookie to same-site requests
+    });
+
+    // Respond with a success message
+    return res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports = { signup, login, logout };
