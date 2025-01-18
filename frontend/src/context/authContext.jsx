@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/protected`,
+          `${import.meta.env.VITE_API_URL}/protected`, // Using process.env for environment variable
           {
             withCredentials: true,
             headers: {
@@ -36,6 +36,7 @@ const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error('Error loading user:', error.response?.data?.message || error.message);
         setUser(null);
+        handleError(error.response?.data?.message || 'Error loading user data.');
       } finally {
         setLoading(false);
       }
@@ -76,61 +77,50 @@ const AuthProvider = ({ children }) => {
   };
 
   // Login function
-  const login = async (email, password) => {
+  const login = async (credentials) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/login`,
-        { email, password },
-        {
-          withCredentials: true,
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        }
+        credentials,
+        { withCredentials: true }
       );
 
-      const { success, message, user } = response.data;
-
-      if (success) {
-        setUser(user);
-        handleSuccess(message);
-        window.location.href = '/';
-        return true;
-      } else {
-        handleError(message || 'Login failed.');
-        return false;
-      }
+      const userData = response.data.user;
+      setUser(userData); // Set user data after successful login
+      handleSuccess('Login successful');
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred.';
-      handleError(errorMessage);
-      return false;
+      console.error('Error logging in:', error.message);
+      handleError(error.response?.data?.message || 'Error logging in');
     }
   };
 
   // Logout function
   const logout = async () => {
+    if (!user) return; // Ensure logout logic runs only if the user is logged in
+    
     setLogoutLoading(true);
     try {
+      // Show logout animation
       handleSuccess('Logging out...', { autoClose: 1000 });
-      
+  
+      // Make the logout API call
       await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
-        {
-          withCredentials: true,
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        }
+        { withCredentials: true }
       );
-      
+  
+      // Clear user state after logout
       setUser(null);
+  
+      // Optional delay for smooth transition
       await new Promise((resolve) => setTimeout(resolve, 2000));
+  
+      // Redirect to the home page
       window.location.href = '/';
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'Error during logout.';
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Error during logout.';
       handleError(errorMessage);
     } finally {
       setLogoutLoading(false);
@@ -160,6 +150,7 @@ const AuthProvider = ({ children }) => {
         isAuthenticated: !!user,
       }}
     >
+      {/* Only show the logout animation while logout is in progress */}
       <LogoutAnimation isVisible={logoutLoading} />
       {children}
     </AuthContext.Provider>
