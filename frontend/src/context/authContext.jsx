@@ -4,10 +4,9 @@ import { handleError, handleSuccess } from '../utils/errorHandler';
 import LogoutAnimation from '../assets/logoutAnimation';
 
 // Create context
-const authContext = createContext();
+export const AuthContext = createContext();
 
-// AuthProvider Component
-const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -68,22 +67,24 @@ const AuthProvider = ({ children }) => {
         { email, password },
         { withCredentials: true }
       );
-
+  
+      console.log(response.data); // Log the full response to see what's returned
+  
       const { success, message, user } = response.data;
-
+  
       if (success) {
         setUser(user);
-        handleSuccess(`Welcome back, ${user.name}!`);
-        window.location.href = '/';
+        handleSuccess(message);
+        navigate('/');
         return true;
       } else {
         handleError(message || 'Login failed.');
         return false;
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred.';
+      const errorMessage =
+        error.response?.data?.message || error.message || 'An unexpected error occurred.';
       handleError(errorMessage);
-      return false;
     }
   };
 
@@ -127,7 +128,7 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <authContext.Provider 
+    <AuthContext.Provider 
       value={{ 
         user, 
         login, 
@@ -140,8 +141,6 @@ const AuthProvider = ({ children }) => {
     >
       <LogoutAnimation isVisible={logoutLoading} />
       {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   );
-};
-
-export { authContext, AuthProvider };
+}

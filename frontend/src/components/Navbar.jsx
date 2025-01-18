@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import logo from '../assets/logo bg.svg';
-import { authContext } from '../context/authContext';
+import { AuthContext } from '../context/authContext';
 
 const Navbar = () => {
-  const { user, logout } = useContext(authContext); // Access user and logout from AuthContext
+  const { user, logout } = useContext(AuthContext); // Access user and logout from AuthContext
 
   return (
     <div>
