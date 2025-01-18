@@ -11,17 +11,26 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
 
+  // Configure axios defaults
+  axios.defaults.withCredentials = true;  // Important for cookies
+  
   // Load user on initial mount
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/protected`,
-          { withCredentials: true }
+          {
+            withCredentials: true,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
         );
 
-        setUser(response.data.user);
-        if (response.data.user) {
+        if (response.data.success) {
+          setUser(response.data.user);
           handleSuccess(`Welcome back, ${response.data.user.name}!`);
         }
       } catch (error) {
@@ -40,7 +49,14 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/create-account`,
-        { name, email, password }
+        { name, email, password },
+        {
+          withCredentials: true,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }
       );
 
       const result = response.data;
@@ -65,7 +81,13 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/login`,
         { email, password },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }
       );
 
       const { success, message, user } = response.data;
@@ -80,40 +102,41 @@ const AuthProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || error.message || 'An unexpected error occurred.';
+      const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred.';
       handleError(errorMessage);
+      return false;
     }
   };
 
-  // Logout function with animation
+  // Logout function
   const logout = async () => {
     setLogoutLoading(true);
     try {
       handleSuccess('Logging out...', { autoClose: 1000 });
-  
+      
       await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }
       );
-  
+      
       setUser(null);
-  
-      // Delay for animation
       await new Promise((resolve) => setTimeout(resolve, 2000));
       window.location.href = '/';
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || error.message || 'Error during logout.';
+      const errorMessage = error.response?.data?.message || error.message || 'Error during logout.';
       handleError(errorMessage);
     } finally {
       setLogoutLoading(false);
     }
   };
-  
 
-  // Loading screen while checking authentication
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-slate-950">
