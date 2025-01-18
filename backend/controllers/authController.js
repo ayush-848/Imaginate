@@ -41,9 +41,6 @@ const signup = async (req, res) => {
       });
       await user.save();
   
-      // Success response
-      console.log({ name, email });
-  
       return res.status(201).json({
         success: true,
         message: "Account created successfully",
@@ -85,7 +82,6 @@ const login = async (req, res) => {
             });
         }
 
-        // Compare the entered password with the hashed password in the database
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
             return res.status(403).json({
@@ -102,13 +98,11 @@ const login = async (req, res) => {
         );
             res.cookie('jwtToken', jwtToken, {
               httpOnly: true,
-              secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
-              sameSite: 'None', // Important for cross-origin requests
+              secure: process.env.NODE_ENV === 'production', 
+              sameSite: 'None',
             });
             
 
-
-        // Send token and user details in the response
         return res.status(200).json({
             success: true,
             message: "Login Successful",
