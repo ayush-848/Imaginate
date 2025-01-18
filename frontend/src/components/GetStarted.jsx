@@ -38,6 +38,7 @@ const GetStarted = () => {
         { prompt }
       );
   
+      // Check if the response contains an image URL
       if (response.data?.imageUrl) {
         setTempResult(response.data.imageUrl);
         setMsg("Image generated successfully!");
@@ -47,12 +48,19 @@ const GetStarted = () => {
       }
     } catch (error) {
       console.error(error);
-      setMsg(error.response?.data?.error || "An error occurred. Please try again.");
+      
+      // Check if the error is related to authentication
+      if (error.response?.status === 403) {
+        setMsg("Authentication required. Please log in to access this feature.");
+      } else {
+        setMsg(error.response?.data?.error || "An error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
       setIsInputDisabled(false);
     }
   };
+  
 
   const handleSave = () => {
     console.log("Saving result:", tempResult);

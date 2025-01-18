@@ -60,4 +60,59 @@ const signup=async(req,res)=>{
     }
 }
 
-module.exports=signup
+
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        const errorMsg = 'Incorrect email or password';
+
+        // Check if user exists
+        if (!user) {
+            return res.status(403).json({
+                success: false,
+                message: errorMsg,
+            });
+        }
+
+        // Compare the entered password with the hashed password in the database
+        const isPassEqual = await bcrypt.compare(password, user.password);
+        if (!isPassEqual) {
+            return res.status(403).json({
+                success: false,
+                message: errorMsg,
+            });
+        }
+
+        // Generate JWT token
+        const jwtToken = jwt.sign(
+            { email: user.email, _id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        res.cookie('jwtToken', jwtToken, {
+            httpOnly: true,   // Ensures the cookie is not accessible via JavaScript
+            secure: process.env.NODE_ENV === 'production',  // Set to true in production (uses HTTPS)
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            sameSite: 'Strict',  // Restrict the cookie to same-site requests
+        });
+
+        // Send token and user details in the response
+        return res.status(200).json({
+            success: true,
+            message: "Login Success",
+            jwtToken, // Token to be stored on the client side
+            email,
+            name: user.name,
+        });
+    } catch (error) {
+        console.error("Login error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+
+module.exports={signup,login}

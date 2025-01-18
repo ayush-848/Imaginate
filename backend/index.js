@@ -3,18 +3,22 @@ const cors = require('cors');
 const axios = require('axios');
 const FormData = require('form-data');
 const connectDB=require('./config/connectDB')
-const authRouter=require('./routes/authRouter')
+const cookieParser = require('cookie-parser');
+const authRouter=require('./routes/authRouter');
+const authenticated = require('./middlewares/authenticated');
+
 
 const app = express();
 const port = 5000;
 require('dotenv').config();
 // Middleware to parse JSON body requests
 app.use(express.json());
+app.use(cookieParser());
 
 // Enable CORS for all origins (for development)
 app.use(
   cors({
-    origin: "https://imaginate-beta.vercel.app",
+    origin: ["https://imaginate-beta.vercel.app","http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"], // Add any methods you need
     allowedHeaders: ["Content-Type", "Authorization"], // Include headers you use
   })
@@ -25,8 +29,17 @@ connectDB();
 app.get('/',(req,res)=>{
   res.send('This is Imaginate API')
 })
+
+app.get('/protected',authenticated,(req,res)=>{
+  res.status(200).json({
+    success: true,
+    message: "You have access!",
+    user: req.user,
+});
+})
 // /generate route handler
-app.post('/generate', async (req, res) => {
+app.post('/generate', authenticated, async (req, res) => {
+
   const { prompt } = req.body;
 
   // Validate if prompt exists
@@ -61,6 +74,7 @@ app.post('/generate', async (req, res) => {
     return res.status(500).json({ message: 'Error fetching image from ClipDrop API', error: error.message });
   }
 });
+
 
 app.use('/auth',authRouter);
 
