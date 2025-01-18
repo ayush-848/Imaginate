@@ -25,7 +25,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = 'http://localhost:5000/auth/create-account';
+    const url = `${import.meta.env.VITE_API_URL}/auth/create-account`;
 
     const { name, email, password, confirmPassword } = formField;
 
