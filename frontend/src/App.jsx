@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import webfont from 'webfontloader';
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
+import AuthProvider from "./context/authContext";
+
 
 
 const App = () => {
@@ -17,11 +19,13 @@ const App = () => {
 
   return (
     <Router>
+        <AuthProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path="/login" element={<Login/>} />
         </Routes>
+        </AuthProvider>
     </Router>
   );
 };
