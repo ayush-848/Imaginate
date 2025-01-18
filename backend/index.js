@@ -12,7 +12,13 @@ require('dotenv').config();
 app.use(express.json());
 
 // Enable CORS for all origins (for development)
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://imaginate-beta.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"], // Add any methods you need
+    allowedHeaders: ["Content-Type", "Authorization"], // Include headers you use
+  })
+);
 connectDB();
 
 
