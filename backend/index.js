@@ -4,6 +4,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 const connectDB=require('./config/connectDB')
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const authRouter=require('./routes/authRouter');
 const authenticated = require('./middlewares/authenticated');
 const User=require('./models/userModel')
@@ -14,6 +15,7 @@ require('dotenv').config();
 // Middleware to parse JSON body requests
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 // Enable CORS for all origins (for development)
 app.use(
