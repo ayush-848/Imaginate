@@ -6,13 +6,13 @@ const Navbar = () => {
     <div>
       <header className="relative flex font-montserrat max-w-screen-xl flex-col overflow-hidden px-4 py-4 md:mx-auto md:flex-row md:items-center">
         <a href="/" className="flex cursor-pointer items-center whitespace-nowrap font-montserrat text-3xl font-semibold text-white">
-          <span className="mr-12 text-6xl text-blue-400">
+          <span className="mr-[72px] text-6xl text-blue-400">
           </span>
           <span>IMAGINATE</span><img src={logo} alt="Logo" className="w-8 h-8" />
 
         </a>
         <input type="checkbox" className="peer hidden" id="navbar-open" />
-        <label className="absolute top-5 right-7 cursor-pointer text-white md:hidden" htmlFor="navbar-open">
+        <label className="absolute top-5 right-5 cursor-pointer text-white md:hidden" htmlFor="navbar-open">
           <span className="sr-only">Toggle Navigation</span>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />

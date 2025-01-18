@@ -79,7 +79,7 @@ const SignUp = () => {
       <section className="bg-gradient-to-b from-black via-slate-900 to-black text-white">
         <Navbar />
         <div className="flex flex-col items-center justify-center px-4 py-8 mx-auto md:h-screen lg:py-0 font-montserrat">
-          <a href="#" className="flex items-center -mt-16 mb-4 text-3xl font-bold">
+          <a href="#" className="flex items-center mt-8 mb-4 text-3xl font-bold lg:-mt-10">
             <span>IMAGINATE</span>
             <img src={logo} alt="Logo" className="w-8 h-8" />
           </a>

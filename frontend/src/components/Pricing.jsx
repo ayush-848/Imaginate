@@ -99,7 +99,7 @@ const Pricing = () => {
                 <span className="text-sm text-slate-400">{plan.credits}</span>
               </div>
 
-              <ul className="space-y-4 mb-8 flex-grow">
+              <ul className="space-y-4 mb-8 flex-grow text-lg">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center text-slate-300">
                     <Check className="text-emerald-400 mr-3 w-5 h-5" />
