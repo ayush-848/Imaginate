@@ -130,11 +130,14 @@ const logout = async (req, res) => {
   try {
     // Clear the JWT token cookie
     res.clearCookie('jwtToken', {
-      httpOnly: true,  // Ensures the cookie can't be accessed by JavaScript
-      sameSite: 'none',  // Restrict cookie to same-site requests
+      httpOnly: true, // Ensures the cookie can't be accessed by JavaScript
+      sameSite: 'None', // Restrict cookie to same-site requests
+      secure: process.env.NODE_ENV === 'production', // Set to true for secure cookies in production
     });
 
-    // Respond with a success message
+    // Optionally, reset Authorization header on the server side (no direct way to modify request headers)
+    // You can choose to send a response indicating logout, preventing further action on the client side.
+
     return res.status(200).json({
       success: true,
       message: 'Logged out successfully',
@@ -147,5 +150,6 @@ const logout = async (req, res) => {
     });
   }
 };
+
 
 module.exports = { signup, login, logout };
