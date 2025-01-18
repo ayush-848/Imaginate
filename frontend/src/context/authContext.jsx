@@ -109,12 +109,7 @@ const AuthProvider = ({ children }) => {
             setUser(user);
             handleSuccess(message || `Welcome back, ${user.name}!`);
             setTimeout(resolve, 2000); // Delay to allow toast to show
-          }),
-          {
-            pending: 'Logging in...',
-            success: 'Logged in successfully!',
-            error: 'Login failed.',
-          }
+          })
         );
         window.location.href = '/'; // Redirect after the message
         return true;
