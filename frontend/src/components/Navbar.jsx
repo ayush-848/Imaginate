@@ -3,7 +3,7 @@ import { AuthContext } from '../context/authContext';
 import logo from '../assets/logo bg.svg';
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext); // Access user and logout
+  const { user, logout, isAuthenticated } = useContext(AuthContext); // Added isAuthenticated for extra clarity
 
   return (
     <header className="relative flex font-montserrat max-w-screen-xl flex-col overflow-hidden px-4 py-4 md:mx-auto md:flex-row md:items-center">
@@ -46,18 +46,16 @@ const Navbar = () => {
           <li className="text-gray-200 md:mr-8 hover:text-white">
             <a href="#">Support</a>
           </li>
-          {user ? (
-            <>
-              <li className="text-gray-200 md:mr-4 flex items-center">
-                <span className="mr-2">Hello, {user.name}</span>
-                <button
-                  onClick={logout}
-                  className="rounded-full border-2 border-red-400 px-6 py-1 text-red-400 transition-colors hover:bg-red-400 hover:text-white"
-                >
-                  Logout
-                </button>
-              </li>
-            </>
+          {isAuthenticated ? (
+            <li className="text-gray-200 md:mr-4 flex items-center space-x-4">
+              <span className="text-blue-400">Hello, {user.name}</span>
+              <button
+                onClick={logout}
+                className="rounded-full border-2 border-red-400 px-6 py-1 text-red-400 transition-colors hover:bg-red-400 hover:text-white"
+              >
+                Logout
+              </button>
+            </li>
           ) : (
             <>
               <li className="md:mr-4">
