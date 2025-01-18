@@ -91,15 +91,15 @@ const AuthProvider = ({ children }) => {
     setLogoutLoading(true);
     try {
       handleSuccess('Logging out...', { autoClose: 1000 });
-
+  
       await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
         { withCredentials: true }
       );
-
+  
       setUser(null);
-
+  
       // Delay for animation
       await new Promise((resolve) => setTimeout(resolve, 2000));
       window.location.href = '/';
@@ -111,6 +111,7 @@ const AuthProvider = ({ children }) => {
       setLogoutLoading(false);
     }
   };
+  
 
   // Loading screen while checking authentication
   if (loading) {
