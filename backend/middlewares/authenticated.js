@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const User=require('../models/userModel')
 
-const authenticated = (req, res, next) => {
+const authenticated = async (req, res, next) => {
     const token = req.cookies.jwtToken;
 
     if (!token) {
@@ -12,7 +13,14 @@ const authenticated = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
+        req.userId = decoded.userId;
+        
+                // Fetch user details from the database
+                const user = await User.findById(req.userId);
+                if (!user) {
+                    throw new Error('User not found');
+                }
+        req.user=user
         next();
     } catch (error) {
         return res.status(401).json({

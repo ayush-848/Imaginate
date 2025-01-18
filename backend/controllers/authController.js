@@ -101,12 +101,8 @@ const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
-        res.cookie('jwtToken', jwtToken, {
-            httpOnly: true,   // Ensures the cookie is not accessible via JavaScript
-            secure: process.env.NODE_ENV === 'production',  // Set to true in production (uses HTTPS)
-            maxAge: 24 * 60 * 60 * 1000, // 24 hours
-            sameSite: 'Strict',  // Restrict the cookie to same-site requests
-        });
+            res.cookie('jwtToken', token, { httpOnly: true });
+
 
         // Send token and user details in the response
         return res.status(200).json({
