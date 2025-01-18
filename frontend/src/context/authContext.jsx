@@ -104,8 +104,6 @@ export function AuthProvider({ children }) {
       
       // Delay for animation
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      handleSuccess('Logged out successfully');
       window.location.href = '/';
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error during logout.';
