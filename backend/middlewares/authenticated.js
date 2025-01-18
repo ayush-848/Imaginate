@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const authenticated = (req, res, next) => {
-    const token = req.cookies.jwtToken;
+    const token = req.cookies.jwtToken || req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
         return res.status(403).json({
