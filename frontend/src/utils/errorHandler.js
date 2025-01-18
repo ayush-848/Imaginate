@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 const toastConfig = {
   position: "top-right",
-  autoClose: 4000,
+  autoClose: 2000,  // Set autoClose to 2000ms (2 seconds)
   hideProgressBar: false,
   closeOnClick: true,
   pauseOnHover: true,
@@ -43,4 +43,3 @@ export const handleSuccess = (msg) => {
 export const handleError = (msg) => {
   toast.error(msg, errorStyle);
 };
-
