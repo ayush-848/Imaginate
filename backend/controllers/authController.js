@@ -131,7 +131,7 @@ const logout = async (req, res) => {
     // Clear the JWT token cookie
     res.clearCookie('jwtToken', {
       httpOnly: true,  // Ensures the cookie can't be accessed by JavaScript
-      sameSite: 'Strict',  // Restrict cookie to same-site requests
+      sameSite: 'none',  // Restrict cookie to same-site requests
     });
 
     // Respond with a success message
