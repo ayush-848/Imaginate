@@ -61,8 +61,8 @@ const Pricing = () => {
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent font-montserrat">
             Choose Your Plan
           </h2>
-          <p className="text-slate-400 text-base max-w-2xl mx-auto">
-            Get started with 10 free credits. Upgrade anytime to unlock more features and credits.
+          <p className="text-slate-400 text-base max-w-2xl mx-auto font-montserrat">
+            Get started with 5 free credits. Upgrade anytime to unlock more features and credits.
           </p>
         </div>
 

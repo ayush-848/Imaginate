@@ -89,7 +89,7 @@ const GetStarted = () => {
           </h1>
           <p className="text-slate-400 text-base max-w-2xl mx-auto">
             Transform your ideas into stunning visuals with our enterprise-grade AI image generator.
-            Start creating now with 10 free credits.
+            Start creating now with 5 free credits.
           </p>
         </div>
 
