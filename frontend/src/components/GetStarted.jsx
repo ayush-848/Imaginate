@@ -202,7 +202,7 @@ const GetStarted = () => {
         {/* Credits Display */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-slate-800/50 rounded-full px-6 py-3">
-            <span className="text-slate-400 text-sm">10 credits remaining</span>
+            <span className="text-slate-400 text-sm">5 credits remaining</span>
             <span className="text-slate-500">•</span>
             <a href="#" className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1">
               <Crown className="w-4 h-4" />

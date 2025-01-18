@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import Navbar from '../components/Navbar';
 import GetStarted from '../components/GetStarted';
 import Footer from '../components/Footer';
+import Pricing from '../components/Pricing';
 
 
 const Home = () => {
@@ -37,6 +38,7 @@ const Home = () => {
         </div>
       </div>
       <GetStarted />
+      <Pricing/>
       <Footer/>
     </div>
   );
