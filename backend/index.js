@@ -15,6 +15,10 @@ app.use(express.json());
 app.use(cors());
 connectDB();
 
+
+app.get('/',(req,res)=>{
+  res.send('This is Imaginate API')
+})
 // /generate route handler
 app.post('/generate', async (req, res) => {
   const { prompt } = req.body;
