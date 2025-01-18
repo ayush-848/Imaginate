@@ -9,7 +9,7 @@ import {
   Crown
 } from 'lucide-react';
 import axios from 'axios';
-import { handleError } from "../utils/errorHandler";
+import { handleError, handleSuccess } from "../utils/errorHandler";
 
 const GetStarted = () => {
   const [prompt, setPrompt] = useState("");
@@ -43,9 +43,11 @@ const GetStarted = () => {
       if (response.data?.imageUrl) {
         setTempResult(response.data.imageUrl);
         setMsg("Image generated successfully!");
+        handleSuccess("-1 credit")
         setShowActions(true);
       } else {
         setMsg("No valid image URL returned. Please try again.");
+        handleError("Please try again")
       }
     } catch (error) {
       console.error(error);

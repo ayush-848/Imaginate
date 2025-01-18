@@ -111,7 +111,7 @@ const login = async (req, res) => {
         // Send token and user details in the response
         return res.status(200).json({
             success: true,
-            message: "Login Success",
+            message: "Login Successful",
             jwtToken,
             user
         });
