@@ -31,7 +31,6 @@ const AuthProvider = ({ children }) => {
 
         if (response.data.success) {
           setUser(response.data.user);
-          handleSuccess(`Welcome back, ${response.data.user.name}!`);
         }
       } catch (error) {
         console.error('Error loading user:', error.response?.data?.message || error.message);
@@ -63,7 +62,6 @@ const AuthProvider = ({ children }) => {
 
       if (result.success) {
         handleSuccess(result.message);
-        window.location.href = '/login';
         return true;
       } else {
         handleError(result.message || 'Failed to create account.');
@@ -94,8 +92,7 @@ const AuthProvider = ({ children }) => {
   
       if (success) {
         setUser(user);
-        handleSuccess(message || `Welcome back, ${user.name}!`); // Ensuring a proper message is passed here
-        window.location.href = '/'; // Redirect after successful login
+        handleSuccess(message);
         return true;
       } else {
         handleError(message || 'Login failed.');

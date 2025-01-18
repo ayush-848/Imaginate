@@ -46,7 +46,6 @@ const signup = async (req, res) => {
   
       return res.status(201).json({
         success: true,
-        error: false,
         message: "Account created successfully",
       });
     } catch (error) {
