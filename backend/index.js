@@ -18,13 +18,15 @@ app.use(cookieParser());
 // Enable CORS for all origins (for development)
 app.use(
   cors({
-    origin: ["https://imaginate-beta.vercel.app", "http://localhost:5173"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // Allow credentials to be included in the request
+    origin: [
+      "https://imaginate-beta.vercel.app", // Frontend production
+      "http://localhost:5173", // Frontend local development
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow cookies and credentials
   })
 );
-
 connectDB();
 
 
