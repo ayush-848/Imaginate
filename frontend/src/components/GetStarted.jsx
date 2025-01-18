@@ -9,7 +9,6 @@ import {
   Crown
 } from 'lucide-react';
 import axios from 'axios';
-import { handleError } from "../utils/errorHandler";
 
 const GetStarted = () => {
   const [prompt, setPrompt] = useState("");
@@ -52,9 +51,9 @@ const GetStarted = () => {
       
       // Check if the error is related to authentication
       if (error.response?.status === 403) {
-        handleError("Authentication required. Please log in to access this feature.");
+        setMsg("Authentication required. Please log in to access this feature.");
       } else {
-        handleError(error.response?.data?.error || "An error occurred. Please try again.");
+        setMsg(error.response?.data?.error || "An error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
