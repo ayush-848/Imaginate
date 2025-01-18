@@ -6,7 +6,7 @@ import LogoutAnimation from '../assets/logoutAnimation';
 // Create context
 export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -67,15 +67,15 @@ export function AuthProvider({ children }) {
         { email, password },
         { withCredentials: true }
       );
-  
+
       console.log(response.data); // Log the full response to see what's returned
-  
+
       const { success, message, user } = response.data;
-  
+
       if (success) {
         setUser(user);
         handleSuccess(message);
-        window.location.href='/';
+        window.location.href = '/';
         return true;
       } else {
         handleError(message || 'Login failed.');
@@ -93,22 +93,21 @@ export function AuthProvider({ children }) {
     setLogoutLoading(true);
     try {
       handleSuccess('Logging out...', { autoClose: 1000 });
-      
+
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/logout`, 
-        {}, 
+        `${import.meta.env.VITE_API_URL}/auth/logout`,
+        {},
         { withCredentials: true }
       );
 
       setUser(null);
-      
+
       // Delay for animation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      handleSuccess('Logged out successfully');
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       window.location.href = '/';
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'Error during logout.';
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Error during logout.';
       handleError(errorMessage);
     } finally {
       setLogoutLoading(false);
@@ -128,19 +127,21 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
-        login, 
-        signup, 
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        signup,
         logout,
         loading,
         logoutLoading,
-        isAuthenticated: !!user 
+        isAuthenticated: !!user,
       }}
     >
       <LogoutAnimation isVisible={logoutLoading} />
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+export default AuthProvider;
