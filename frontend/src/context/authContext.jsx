@@ -75,7 +75,7 @@ export function AuthProvider({ children }) {
       if (success) {
         setUser(user);
         handleSuccess(message);
-        window.location.href('/')
+        window.location.href='/';
         return true;
       } else {
         handleError(message || 'Login failed.');
