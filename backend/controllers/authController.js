@@ -72,7 +72,7 @@ const signup = async (req, res) => {
   
 
 
-  const login = async (req, res) => {
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -101,12 +101,8 @@ const signup = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
+            res.cookie('jwtToken', token, { httpOnly: true });
 
-        // Set the cookie with the generated JWT token
-        res.cookie('jwtToken', jwtToken, { 
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000 // Set cookie expiration to 24 hours
-        });
 
         // Send token and user details in the response
         return res.status(200).json({
@@ -125,12 +121,13 @@ const signup = async (req, res) => {
 };
 
 
-
 const logout = async (req, res) => {
   try {
     // Clear the JWT token cookie
     res.clearCookie('jwtToken', {
-      httpOnly: true,
+      httpOnly: true,  // Ensures the cookie can't be accessed by JavaScript
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
+      sameSite: 'Strict',  // Restrict cookie to same-site requests
     });
 
     // Respond with a success message
