@@ -89,13 +89,13 @@ const AuthProvider = ({ children }) => {
           }
         }
       );
-
+  
       const { success, message, user } = response.data;
-
+  
       if (success) {
         setUser(user);
-        handleSuccess(message);
-        window.location.href = '/';
+        handleSuccess(message || `Welcome back, ${user.name}!`); // Ensuring a proper message is passed here
+        window.location.href = '/'; // Redirect after successful login
         return true;
       } else {
         handleError(message || 'Login failed.');
@@ -103,10 +103,11 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred.';
-      handleError(errorMessage);
+      handleError(errorMessage); // Make sure to handle error properly
       return false;
     }
   };
+  
 
   // Logout function
   const logout = async () => {
@@ -114,7 +115,6 @@ const AuthProvider = ({ children }) => {
   
     setLogoutLoading(true);
     try {
-      handleSuccess('Logging out...', { autoClose: 1000 });
   
       // Make the logout API call
       await axios.post(
