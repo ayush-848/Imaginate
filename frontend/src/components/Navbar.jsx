@@ -6,7 +6,7 @@ const Navbar = () => {
     <div>
       <header className="relative flex font-montserrat max-w-screen-xl flex-col overflow-hidden px-4 py-4 md:mx-auto md:flex-row md:items-center">
         <a href="/" className="flex cursor-pointer items-center whitespace-nowrap font-montserrat text-3xl font-semibold text-white">
-          <span className="mr-[72px] text-6xl text-blue-400">
+          <span className="mr-16 text-6xl text-blue-400">
           </span>
           <span>IMAGINATE</span><img src={logo} alt="Logo" className="w-8 h-8" />
 
