@@ -71,13 +71,25 @@ const GetStarted = () => {
   };
 
   const handleSave = () => {
-    console.log("Saving result:", tempResult);
-    setPrompt("");
-    setMsg("Image saved successfully!");
-    setShowActions(false);
-    setTempResult(null);
-  };
-
+      if (tempResult) {
+        // Create a link element to trigger the download
+        const link = document.createElement('a');
+        link.href = tempResult; // Set the href to the image URL
+        link.download = 'generated-image.png'; // Set a default download file name
+        document.body.appendChild(link); // Append the link to the body (it's needed for the click event)
+        
+        // Trigger the download
+        link.click();
+        
+        // Clean up by removing the link element from the DOM
+        document.body.removeChild(link);
+    
+        setPrompt("");
+        setShowActions(false);
+        setTempResult(null);
+      }
+    };
+    
   const handleClear = () => {
     setPrompt("");
     setTempResult(null);
@@ -153,7 +165,7 @@ const GetStarted = () => {
                     hover:from-emerald-700 hover:to-emerald-800 text-white font-medium rounded-lg 
                     transition flex items-center gap-2"
                 >
-                  Save to Library
+                  Download Image
                   <CheckCircle className="w-4 h-4" />
                 </button>
                 <button

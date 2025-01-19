@@ -13,7 +13,7 @@ const Navbar = () => {
         className="flex cursor-pointer items-center whitespace-nowrap font-montserrat text-3xl font-semibold text-white"
       >
         <span className="mr-16 text-6xl text-blue-400"></span>
-        <span>IMAGINATE</span>
+        <span>IMAGINATE&nbsp;</span>
         <img src={logo} alt="Logo" className="w-8 h-8" />
       </a>
       <input type="checkbox" className="peer hidden" id="navbar-open" />
