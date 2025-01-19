@@ -189,7 +189,7 @@ const GetStarted = () => {
           {/* Status Message */}
           {msg && (
             <div className={`mt-4 text-center font-medium ${
-              msg.includes("success") ? "text-emerald-400" : "text-red-400"
+              msg.includes("success") || msg.includes("Generating your image") ? "text-emerald-400" : "text-red-400"
             }`}>
               {msg}
             </div>

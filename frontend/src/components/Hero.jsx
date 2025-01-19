@@ -14,7 +14,7 @@ const Hero = () => {
             </div>
             {/* Logo and Title */}
             <h2
-  className="flex items-center justify-center font-bold text-4xl sm:text-4xl md:text-5xl lg:text-5xl mb-10 font-montserrat"
+  className="flex items-center justify-center font-bold text-4xl sm:text-4xl md:text-5xl lg:text-5xl mb-10 font-montserrat ml-4"
 >
   IMAGINATE
   <img
