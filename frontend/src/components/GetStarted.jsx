@@ -56,8 +56,12 @@ const GetStarted = () => {
       if (error.response?.status === 403) {
         setMsg("Authentication required. Please log in to access this feature.");
         handleError("Please Login");
-      } else {
-        setMsg(error.response?.data?.message || "An error occurred. Please try again.");
+      } else if(error.response?.status === 400){
+        setMsg(error.response?.data?.message || "You do not have enough credits");
+        handleError('Insufficient credits')
+      }
+      else {
+        setMsg(error.response?.data?.error || "An error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -80,7 +84,7 @@ const GetStarted = () => {
     setMsg("");
   };
 
-  const availableCredits = user?.credits || 5; // Use user credits if signed in, otherwise default to 5
+  const availableCredits = user?.userCredits || 5; // Use user credits if signed in, otherwise default to 5
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 font-montserrat text-white">
