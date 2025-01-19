@@ -7,8 +7,6 @@ import Login from "./pages/Login";
 import AuthProvider from "./context/authContext";
 import { ToastContainer } from "react-toastify";
 
-
-
 const App = () => {
   useEffect(() => {
     webfont.load({
@@ -21,7 +19,7 @@ const App = () => {
   return (
     <Router>
         <AuthProvider>
-          <ToastContainer/>
+          <ToastContainer/> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp/>} />
