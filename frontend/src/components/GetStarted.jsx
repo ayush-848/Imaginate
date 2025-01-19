@@ -72,29 +72,41 @@ const GetStarted = () => {
 
   const handleSave = () => {
     if (tempResult) {
-      // Create a link element to trigger the download
-      const link = document.createElement('a');
-      link.href = tempResult; // Set the href to the image URL
-      link.download = 'generated-image.png'; // Set a default download file name
-      document.body.appendChild(link); // Append the link to the body (it's needed for the click event)
+      // Convert the base64 or image URL to a Blob
+      fetch(tempResult)
+        .then((res) => res.blob())
+        .then((blob) => {
+          // Create a temporary object URL for the Blob
+          const blobUrl = URL.createObjectURL(blob);
   
-      // Trigger the download
-      link.click();
+          // Create a link element to trigger the download
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = 'generated-image.png'; // Set a default download file name
+          document.body.appendChild(link);
   
-      // Clean up by removing the link element from the DOM
-      document.body.removeChild(link);
+          // Trigger the download
+          link.click();
   
-      // Clear the state and show the success message
-      setPrompt("");
-      setShowActions(false);
-      setMsg("Image saved successfully!");
+          // Clean up
+          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
   
-      // Refresh the page after a slight delay (to allow download to complete)
-      setTimeout(() => {
-        window.location.reload(); // This will refresh the page
-      }, 500); // 500ms delay to allow download to start
+          // Clear the state and show the success message
+          setPrompt("");
+          setShowActions(false);
+          setMsg("Image saved successfully!");
+  
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        })
+        .catch((err) => {
+          setMsg(err);
+        });
     }
   };
+  
   
     
   const handleClear = () => {
@@ -102,6 +114,7 @@ const GetStarted = () => {
     setTempResult(null);
     setShowActions(false);
     setMsg("");
+      window.location.reload();
   };
 
   const availableCredits = user?.userCredits ?? 5;
