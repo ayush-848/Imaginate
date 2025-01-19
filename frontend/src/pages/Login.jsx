@@ -29,8 +29,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formField;
-
-    // Validation
+    
     if (!email || !password) {
       return handleError('All fields are required');
     }
