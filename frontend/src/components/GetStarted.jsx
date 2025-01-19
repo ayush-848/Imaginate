@@ -99,7 +99,7 @@ const GetStarted = () => {
   
           setTimeout(() => {
             window.location.reload();
-          }, 500);
+          }, 2000);
         })
         .catch((err) => {
           setMsg(err);
