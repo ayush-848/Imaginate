@@ -57,7 +57,7 @@ const GetStarted = () => {
         setMsg("Authentication required. Please log in to access this feature.");
         handleError("Please Login");
       } else {
-        setMsg(error.response?.data?.error || "An error occurred. Please try again.");
+        setMsg(error.response?.data?.message || "An error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
