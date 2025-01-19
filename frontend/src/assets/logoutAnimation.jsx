@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const logoutAnimation = ({ isVisible }) => {
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950 transition-opacity duration-500 ${
+      className={`fixed font-montserrat inset-0 z-50 flex items-center justify-center bg-slate-950 transition-opacity duration-500 ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
