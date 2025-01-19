@@ -10,10 +10,6 @@ module.exports = {
       inter:['Inter','san-serif'],
     },
     extend: {
-      colors: {
-        primary: "#05b6d3",
-        secondary: "#ef863e",
-      },
     },
   },
   plugins: [],
