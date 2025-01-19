@@ -21,7 +21,6 @@ const App = () => {
   return (
     <Router>
         <AuthProvider>
-          <ToastContainer/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp/>} />
