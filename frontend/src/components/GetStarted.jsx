@@ -86,6 +86,7 @@ const GetStarted = () => {
     
         setPrompt("");
         setShowActions(false);
+        setMsg("")
         setTempResult(null);
       }
     };
