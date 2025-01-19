@@ -84,7 +84,7 @@ const GetStarted = () => {
     setMsg("");
   };
 
-  const availableCredits = user?.userCredits || 5; // Use user credits if signed in, otherwise default to 5
+  const availableCredits = user.userCredits || 5; // Use user credits if signed in, otherwise default to 5
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 font-montserrat text-white">
