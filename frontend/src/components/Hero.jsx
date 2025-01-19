@@ -39,7 +39,7 @@ const Hero = () => {
           {/* Call-to-action Buttons */}
           <div className="flex items-center">
             <a
-              href="#"
+              href="#generate"
               className="mr-6 inline-flex h-12 items-center justify-center rounded bg-blue-700 px-6 font-medium tracking-wide text-white shadow-md outline-none transition duration-200 hover:bg-blue-800 focus:ring"
             >
               Get started

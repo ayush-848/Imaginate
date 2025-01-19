@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import { handleError, handleSuccess } from "../utils/errorHandler";
 import { AuthContext } from "../context/authContext";
+import Features from "./Features";
 
 const GetStarted = () => {
   const { user } = useContext(AuthContext); // Access user data from AuthContext
@@ -111,7 +112,7 @@ const GetStarted = () => {
         </div>
 
         {/* Main Generation Section */}
-        <div className="max-w-2xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm mb-28">
+        <div id="generate" className="max-w-2xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm mb-28">
           <div className="flex flex-col gap-4">
             <input
               type="text"
@@ -190,31 +191,7 @@ const GetStarted = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-700/50">
-            <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Zap className="w-6 h-6 text-blue-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Enterprise Speed</h3>
-            <p className="text-slate-400">Generate production-ready images in under 10 seconds with our optimized AI.</p>
-          </div>
-
-          <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-700/50">
-            <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Shield className="w-6 h-6 text-emerald-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Commercial License</h3>
-            <p className="text-slate-400">Full ownership rights for business use. No attribution required.</p>
-          </div>
-
-          <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-700/50">
-            <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Users className="w-6 h-6 text-purple-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Team Features</h3>
-            <p className="text-slate-400">Collaborate with unlimited team members. Share assets instantly.</p>
-          </div>
-        </div>
+        <Features/>
 
         {/* Credits Display */}
         <div className="text-center">

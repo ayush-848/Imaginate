@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import logo from '../assets/logo bg.svg';
 import { AuthContext } from '../context/authContext';
 
+
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext); // Access user and logout
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <header className="relative flex font-montserrat max-w-screen-xl flex-col overflow-hidden px-4 py-4 md:mx-auto md:flex-row md:items-center">
@@ -38,10 +39,10 @@ const Navbar = () => {
       >
         <ul className="flex flex-col items-center space-y-2 md:ml-auto md:flex-row md:space-y-0">
           <li className="font-bold text-gray-200 md:mr-8 hover:text-white">
-            <a href="#">Pricing</a>
+            <a href="#pricing">Pricing</a>
           </li>
           <li className="text-gray-200 md:mr-8 hover:text-white">
-            <a href="#">Features</a>
+            <a href="#features">Features</a>
           </li>
           <li className="text-gray-200 md:mr-8 hover:text-white">
             <a href="#">Support</a>
