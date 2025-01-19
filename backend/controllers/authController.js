@@ -46,8 +46,6 @@ const signup = async (req, res) => {
         message: "Account created successfully",
       });
     } catch (error) {
-      // Improved error handling to send clearer messages
-      console.error("Error creating account:", error);
   
       let errorMessage = "Server error, please try again later";
       if (error.message.includes("All fields are required")) {

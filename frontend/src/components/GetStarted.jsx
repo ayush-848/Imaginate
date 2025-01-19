@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { 
   Sparkles, 
   Zap, 
@@ -10,8 +10,10 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { handleError, handleSuccess } from "../utils/errorHandler";
+import { AuthContext } from "../context/authContext";
 
 const GetStarted = () => {
+  const { user } = useContext(AuthContext); // Access user data from AuthContext
   const [prompt, setPrompt] = useState("");
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,34 +30,32 @@ const GetStarted = () => {
       setMsg("Prompt cannot be empty.");
       return;
     }
-  
+
     setLoading(true);
     setMsg("Generating your image...");
     setIsInputDisabled(true);
-  
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/generate`,
         { prompt }
       );
-  
-      // Check if the response contains an image URL
+
       if (response.data?.imageUrl) {
         setTempResult(response.data.imageUrl);
         setMsg("Image generated successfully!");
-        handleSuccess("-1 credit")
+        handleSuccess("-1 credit");
         setShowActions(true);
       } else {
         setMsg("No valid image URL returned. Please try again.");
-        handleError("Please try again")
+        handleError("Please try again");
       }
     } catch (error) {
       console.error(error);
-      
-      // Check if the error is related to authentication
+
       if (error.response?.status === 403) {
         setMsg("Authentication required. Please log in to access this feature.");
-        handleError('Please Login');
+        handleError("Please Login");
       } else {
         setMsg(error.response?.data?.error || "An error occurred. Please try again.");
       }
@@ -64,7 +64,6 @@ const GetStarted = () => {
       setIsInputDisabled(false);
     }
   };
-  
 
   const handleSave = () => {
     console.log("Saving result:", tempResult);
@@ -81,18 +80,20 @@ const GetStarted = () => {
     setMsg("");
   };
 
+  const availableCredits = user?.credits || 5; // Use user credits if signed in, otherwise default to 5
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 font-montserrat text-white">
       {/* Trial Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-slate-800/40 py-2.5">
-  <div className="max-w-6xl mx-auto px-4 text-center flex items-center justify-center gap-3">
-    <span className="bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-full text-sm font-semibold text-indigo-300 mr-4">NEW</span>
-    <span className="text-base text-slate-300">
-      Try our enterprise plan free for 14 days
-      <span className="inline-block ml-4 text-indigo-400 hover:text-indigo-300 font-medium cursor-pointer transition-colors">→</span>
-    </span>
-  </div>
-</div>
+        <div className="max-w-6xl mx-auto px-4 text-center flex items-center justify-center gap-3">
+          <span className="bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-full text-sm font-semibold text-indigo-300 mr-4">NEW</span>
+          <span className="text-base text-slate-300">
+            Try our enterprise plan free for 14 days
+            <span className="inline-block ml-4 text-indigo-400 hover:text-indigo-300 font-medium cursor-pointer transition-colors">→</span>
+          </span>
+        </div>
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-16">
@@ -214,7 +215,7 @@ const GetStarted = () => {
         {/* Credits Display */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-slate-800/50 rounded-full px-6 py-3">
-            <span className="text-slate-400 text-sm">5 credits remaining</span>
+            <span className="text-slate-400 text-sm">{availableCredits} credits remaining</span>
             <span className="text-slate-500">•</span>
             <a href="#" className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1">
               <Crown className="w-4 h-4" />

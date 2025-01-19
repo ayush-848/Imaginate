@@ -49,21 +49,30 @@ app.get('/protected', authenticated, async (req, res) => {
   });
 });
 
-// /generate route handler
 app.post('/generate', authenticated, async (req, res) => {
-
-  const { prompt } = req.body;
+  const { prompt, userId } = req.body;
 
   // Validate if prompt exists
   if (!prompt) {
     return res.status(400).json({ message: 'Prompt is required' });
   }
 
-  // Prepare FormData with the prompt
-  const form = new FormData();
-  form.append('prompt', prompt);
-
   try {
+    // Find the user in the database
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the user has enough credits
+    if (user.userCredits <= 0) {
+      return res.status(400).json({ message: 'Not enough credits to generate an image' });
+    }
+
+    // Prepare FormData with the prompt
+    const form = new FormData();
+    form.append('prompt', prompt);
+
     // Make the request to the ClipDrop API
     const response = await axios.post('https://clipdrop-api.co/text-to-image/v1', form, {
       headers: {
@@ -78,14 +87,24 @@ app.post('/generate', authenticated, async (req, res) => {
     const base64Image = imageBuffer.toString('base64');
     const imageSrc = `data:image/png;base64,${base64Image}`;
 
-    // Return the base64-encoded image in the response
-    res.json({ imageUrl: imageSrc });
+    // Deduct 1 credit for the successful image generation
+    user.userCredits -= 1;
+    await user.save();
+
+    res.json({
+      imageUrl: imageSrc,
+      userCredits: user.userCredits,
+    });
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Error fetching image from ClipDrop API', error: error.message });
+    return res.status(500).json({
+      message: 'Error fetching image from ClipDrop API',
+      error: error.message,
+    });
   }
 });
+
 
 
 app.use('/auth',authRouter);

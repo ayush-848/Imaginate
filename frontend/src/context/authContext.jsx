@@ -12,8 +12,8 @@ const AuthProvider = ({ children }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   // Configure axios defaults
-  axios.defaults.withCredentials = true;  // Important for cookies
-  
+  axios.defaults.withCredentials = true;
+
   // Load user on initial mount
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,13 +24,13 @@ const AuthProvider = ({ children }) => {
             withCredentials: true,
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+            },
           }
         );
 
         if (response.data.success) {
-          setUser(response.data.user);
+          setUser(response.data.user); // Include user data (with credits) in the state
         }
       } catch (error) {
         console.error('Error loading user:', error.response?.data?.message || error.message);
@@ -53,8 +53,8 @@ const AuthProvider = ({ children }) => {
           withCredentials: true,
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
 
@@ -83,15 +83,15 @@ const AuthProvider = ({ children }) => {
           withCredentials: true,
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
-  
+
       const { success, message, user } = response.data;
-  
+
       if (success) {
-        setUser(user);
+        setUser(user); // Store user data, including credits
         handleSuccess(message);
         return true;
       } else {
@@ -99,32 +99,28 @@ const AuthProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred.';
-      handleError(errorMessage); // Make sure to handle error properly
+      const errorMessage =
+        error.response?.data?.message || error.message || 'An unexpected error occurred.';
+      handleError(errorMessage);
       return false;
     }
   };
-  
 
   // Logout function
   const logout = async () => {
-    if (!user) return; // Ensure logout logic runs only if the user is logged in
-  
+    if (!user) return;
+
     setLogoutLoading(true);
     try {
-  
-      // Make the logout API call
       await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
         { withCredentials: true }
       );
-  
-      // Clear user state
-      setUser(null);
-  
-      // Optional delay for smooth transition
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      setUser(null); // Clear user state
+
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Optional delay for smooth transition
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || error.message || 'Error during logout.';
@@ -133,7 +129,14 @@ const AuthProvider = ({ children }) => {
       setLogoutLoading(false);
     }
   };
-  
+
+  // Update user credits after an API call
+  const updateCredits = (newCredits) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      userCredits: newCredits,
+    }));
+  };
 
   if (loading) {
     return (
@@ -150,11 +153,13 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        userCredits: user?.userCredits || 0, // Export user credits
         login,
         signup,
         logout,
         loading,
         logoutLoading,
+        updateCredits, // Expose a function to update credits
         isAuthenticated: !!user,
       }}
     >
