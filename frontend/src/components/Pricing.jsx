@@ -5,8 +5,8 @@ const Pricing = () => {
   const plans = [
     {
       name: "Starter",
-      price: "Free",
-      credits: "10 credits/month",
+      price: "$6",
+      credits: "20 credits/month",
       features: [
         "Access to basic image generation",
         "Standard response time",
