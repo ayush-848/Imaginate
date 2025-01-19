@@ -50,7 +50,7 @@ app.get('/protected', authenticated, async (req, res) => {
 });
 
 app.post('/generate', authenticated, async (req, res) => {
-  const { prompt, userId } = req.body;
+  const { prompt} = req.body;
 
   // Validate if prompt exists
   if (!prompt) {
@@ -59,7 +59,7 @@ app.post('/generate', authenticated, async (req, res) => {
 
   try {
     // Find the user in the database
-    const user = await User.findById(userId);
+    const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
