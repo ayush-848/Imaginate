@@ -71,25 +71,31 @@ const GetStarted = () => {
   };
 
   const handleSave = () => {
-      if (tempResult) {
-        // Create a link element to trigger the download
-        const link = document.createElement('a');
-        link.href = tempResult; // Set the href to the image URL
-        link.download = 'generated-image.png'; // Set a default download file name
-        document.body.appendChild(link); // Append the link to the body (it's needed for the click event)
-        
-        // Trigger the download
-        link.click();
-        
-        // Clean up by removing the link element from the DOM
-        document.body.removeChild(link);
-    
-        setPrompt("");
-        setShowActions(false);
-        setMsg("")
-        setTempResult(null);
-      }
-    };
+    if (tempResult) {
+      // Create a link element to trigger the download
+      const link = document.createElement('a');
+      link.href = tempResult; // Set the href to the image URL
+      link.download = 'generated-image.png'; // Set a default download file name
+      document.body.appendChild(link); // Append the link to the body (it's needed for the click event)
+  
+      // Trigger the download
+      link.click();
+  
+      // Clean up by removing the link element from the DOM
+      document.body.removeChild(link);
+  
+      // Clear the state and show the success message
+      setPrompt("");
+      setShowActions(false);
+      setMsg("Image saved successfully!");
+  
+      // Refresh the page after a slight delay (to allow download to complete)
+      setTimeout(() => {
+        window.location.reload(); // This will refresh the page
+      }, 500); // 500ms delay to allow download to start
+    }
+  };
+  
     
   const handleClear = () => {
     setPrompt("");
