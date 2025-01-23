@@ -115,7 +115,7 @@ app.post('/generate', authenticated, async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      message: 'Error fetching image from ClipDrop API',
+      message: 'Error generating image',
       error: error.message,
     });
   }
@@ -138,7 +138,7 @@ async function uploadImageToImgur(imageBuffer) {
     return response.data.data.link;
   } catch (error) {
     console.error('Error uploading to Imgur:', error);
-    throw new Error('Failed to upload image to Imgur');
+    throw new Error('Failed to generate image');
   }
 }
 
