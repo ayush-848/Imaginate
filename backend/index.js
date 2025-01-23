@@ -5,9 +5,11 @@ const FormData = require('form-data');
 const connectDB=require('./config/connectDB')
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const authRouter=require('./routes/authRouter');
+const authRoutes=require('./routes/authRoutes');
+const userRoutes=require('./routes/userRoutes')
 const authenticated = require('./middlewares/authenticated');
-const User=require('./models/userModel')
+const User=require('./models/userModel');
+const Chat=require('./models/chatModel');
 
 const app = express();
 const port = 5000;
@@ -50,7 +52,7 @@ app.get('/protected', authenticated, async (req, res) => {
 });
 
 app.post('/generate', authenticated, async (req, res) => {
-  const { prompt} = req.body;
+  const { prompt } = req.body;
 
   // Validate if prompt exists
   if (!prompt) {
@@ -69,14 +71,14 @@ app.post('/generate', authenticated, async (req, res) => {
       return res.status(400).json({ message: 'Not enough credits to generate an image' });
     }
 
-    // Prepare FormData with the prompt
+    // Prepare FormData with the prompt for ClipDrop API
     const form = new FormData();
     form.append('prompt', prompt);
 
     // Make the request to the ClipDrop API
     const response = await axios.post('https://clipdrop-api.co/text-to-image/v1', form, {
       headers: {
-        ...form.getHeaders(), // This ensures the correct Content-Type is set
+        ...form.getHeaders(),
         'x-api-key': process.env.CLICKDROP_API_KEY, // Replace with your actual API key
       },
       responseType: 'arraybuffer', // Ensure the response is in binary form
@@ -87,10 +89,24 @@ app.post('/generate', authenticated, async (req, res) => {
     const base64Image = imageBuffer.toString('base64');
     const imageSrc = `data:image/png;base64,${base64Image}`;
 
+    // Upload the generated image to Imgur
+    const imgurUrl = await uploadImageToImgur(imageBuffer);
+
+    // Save the image generation result in the Chat model
+    const newChat = new Chat({
+      userId: req.user._id,
+      prompt,
+      result: 'Image generated successfully',
+      status: 'success',
+      imageUrl: imgurUrl,  // Store Imgur URL
+    });
+    await newChat.save();
+
     // Deduct 1 credit for the successful image generation
     user.userCredits -= 1;
     await user.save();
 
+    // Return the generated image and remaining credits to the client
     res.json({
       imageUrl: imageSrc,
       userCredits: user.userCredits,
@@ -105,9 +121,29 @@ app.post('/generate', authenticated, async (req, res) => {
   }
 });
 
+// Function to upload the image to Imgur
+async function uploadImageToImgur(imageBuffer) {
+  try {
+    const formData = new FormData();
+    formData.append('image', imageBuffer, 'generated-image.png');
 
+    const response = await axios.post('https://api.imgur.com/3/upload', formData, {
+      headers: {
+        'Authorization': `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
+        ...formData.getHeaders(),
+      },
+    });
 
-app.use('/auth',authRouter);
+    // Return the Imgur URL of the uploaded image
+    return response.data.data.link;
+  } catch (error) {
+    console.error('Error uploading to Imgur:', error);
+    throw new Error('Failed to upload image to Imgur');
+  }
+}
+
+app.use('/user',userRoutes);
+app.use('/auth',authRoutes);
 
 // Start the server
 app.listen(port, () => {
