@@ -58,7 +58,7 @@ const History = () => {
             <>
                 <div className="relative min-h-screen bg-gradient-to-b from-black via-gray-900 to-slate-950 overflow-hidden font-montserrat">
                 <Navbar />
-                    <p className="text-2xl font-semibold text-gray-300 text-center mb-16">
+                    <p className="text-2xl font-semibold text-gray-300 text-center mt-16">
                         Please log in to view your chat history.
                     </p>
                 </div>
