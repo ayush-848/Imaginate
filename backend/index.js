@@ -2,39 +2,40 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const FormData = require('form-data');
-const connectDB=require('./config/connectDB')
+const connectDB = require('./config/connectDB')
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const authRoutes=require('./routes/authRoutes');
-const userRoutes=require('./routes/userRoutes')
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes')
 const authenticated = require('./middlewares/authenticated');
-const User=require('./models/userModel');
-const Chat=require('./models/chatModel');
+const User = require('./models/userModel');
+const Chat = require('./models/chatModel');
+const { uploadImageToImgur } = require('./services/imageUploader');
+
 
 const app = express();
 const port = 5000;
 require('dotenv').config();
-// Middleware to parse JSON body requests
+
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
-
-// Enable CORS for all origins (for development)
 app.use(
   cors({
     origin: [
-      "https://imaginate-beta.vercel.app", // Frontend production
-      "http://localhost:5173", // Frontend local development
+      "https://imaginate-beta.vercel.app",
+      "http://localhost:5173",
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow cookies and credentials
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 connectDB();
 
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
   res.send('This is Imaginate API')
 })
 
@@ -89,7 +90,6 @@ app.post('/generate', authenticated, async (req, res) => {
     const base64Image = imageBuffer.toString('base64');
     const imageSrc = `data:image/png;base64,${base64Image}`;
 
-    // Upload the generated image to Imgur
     const imgurUrl = await uploadImageToImgur(imageBuffer);
 
     // Save the image generation result in the Chat model
@@ -98,7 +98,7 @@ app.post('/generate', authenticated, async (req, res) => {
       prompt,
       result: 'Image generated successfully',
       status: 'success',
-      imageUrl: imgurUrl,  // Store Imgur URL
+      imageUrl: imgurUrl,
     });
     await newChat.save();
 
@@ -106,7 +106,6 @@ app.post('/generate', authenticated, async (req, res) => {
     user.userCredits -= 1;
     await user.save();
 
-    // Return the generated image and remaining credits to the client
     res.json({
       imageUrl: imageSrc,
       userCredits: user.userCredits,
@@ -121,29 +120,9 @@ app.post('/generate', authenticated, async (req, res) => {
   }
 });
 
-// Function to upload the image to Imgur
-async function uploadImageToImgur(imageBuffer) {
-  try {
-    const formData = new FormData();
-    formData.append('image', imageBuffer, 'generated-image.png');
 
-    const response = await axios.post('https://api.imgur.com/3/upload', formData, {
-      headers: {
-        'Authorization': `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
-        ...formData.getHeaders(),
-      },
-    });
-
-    // Return the Imgur URL of the uploaded image
-    return response.data.data.link;
-  } catch (error) {
-    console.error('Error uploading to Imgur:', error);
-    throw new Error('Failed to generate image');
-  }
-}
-
-app.use('/user',userRoutes);
-app.use('/auth',authRoutes);
+app.use('/user', userRoutes);
+app.use('/auth', authRoutes);
 
 // Start the server
 app.listen(port, () => {

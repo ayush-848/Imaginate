@@ -14,7 +14,7 @@ import { AuthContext } from "../context/authContext";
 import Features from "./Features";
 
 const GetStarted = () => {
-  const { user } = useContext(AuthContext); // Access user data from AuthContext
+  const { user } = useContext(AuthContext);
   const [prompt, setPrompt] = useState("");
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
