@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const authenticated = require('../middlewares/authenticated');
-const Chat=require('../models/chatModel')
+const Chat = require('../models/chatModel');
+
 const chats = async (req, res) => {
   try {
-    // Fetch chats for the authenticated user
-    const userChats = await Chat.find({ userId: req.user._id }).sort({ timestamp: -1 }); // Sort by latest first
+    // Fetch chats for the authenticated user, excluding the `_id` field
+    const userChats = await Chat.find({ userId: req.user._id })
+      .select('-_id') // Exclude the _id field
+      .sort({ timestamp: -1 }); // Sort by latest first
 
     if (!userChats || userChats.length === 0) {
       return res.status(404).json({ success: false, message: 'No chats found' });

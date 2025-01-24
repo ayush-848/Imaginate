@@ -130,7 +130,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Update user credits after an API call
   const updateCredits = (newCredits) => {
     setUser((prevUser) => ({
       ...prevUser,

@@ -61,28 +61,22 @@ app.post('/generate', authenticated, async (req, res) => {
   }
 
   try {
-    // Find the user in the database
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    // Check if the user has enough credits
     if (user.userCredits <= 0) {
       return res.status(400).json({ message: 'Not enough credits to generate an image' });
     }
-
-    // Prepare FormData with the prompt for ClipDrop API
     const form = new FormData();
     form.append('prompt', prompt);
 
-    // Make the request to the ClipDrop API
     const response = await axios.post('https://clipdrop-api.co/text-to-image/v1', form, {
       headers: {
         ...form.getHeaders(),
-        'x-api-key': process.env.CLICKDROP_API_KEY, // Replace with your actual API key
+        'x-api-key': process.env.CLICKDROP_API_KEY,
       },
-      responseType: 'arraybuffer', // Ensure the response is in binary form
+      responseType: 'arraybuffer',
     });
 
     // Convert the array buffer response to a base64 string
@@ -92,7 +86,6 @@ app.post('/generate', authenticated, async (req, res) => {
 
     const imgurUrl = await uploadImageToImgur(imageBuffer);
 
-    // Save the image generation result in the Chat model
     const newChat = new Chat({
       userId: req.user._id,
       prompt,
@@ -102,7 +95,6 @@ app.post('/generate', authenticated, async (req, res) => {
     });
     await newChat.save();
 
-    // Deduct 1 credit for the successful image generation
     user.userCredits -= 1;
     await user.save();
 
